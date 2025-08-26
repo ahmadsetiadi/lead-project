@@ -67,7 +67,8 @@ export class DashboardComponent {
     const file: File = event.target.files[0];
     if (file && file.type === 'text/csv') {
       this.leadService.uploadCSV(file).subscribe({
-        next: (res) => {
+        next: (res) => {          
+          this.fetchLeads();
           alert('Upload successful!');
           console.log(res);
         },
