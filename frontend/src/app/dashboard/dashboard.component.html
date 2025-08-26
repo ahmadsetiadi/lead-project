@@ -1,0 +1,145 @@
+<div class="min-h-screen bg-dashboard-dark text-gray-200">
+  <!-- Header -->
+  <header class="flex justify-between items-center px-6 py-4 bg-dashboard-gray shadow-lg">
+    <h1 class="text-2xl font-bold text-white">Lead Management</h1>
+    <input type="file" #fileInput accept=".csv" class="hidden" (change)="onFileSelected($event)" />
+    <button (click)="fileInput.click()"
+      class="bg-gradient-to-r from-green-600 to-yellow-400 px-4 py-2 rounded-xl text-white font-medium hover:opacity-90">
+      Upload Data
+    </button>
+    <button (click)="exportCSV()"
+      class="bg-gradient-to-r from-green-400 to-blue-500 px-4 py-2 rounded-xl text-white font-medium hover:opacity-90">
+      Export CSV
+    </button>
+  </header>
+
+  <!-- Stats Cards -->
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6">
+    <div class="bg-dashboard-gray rounded-xl p-4 shadow-md">
+      <h2 class="text-sm text-gray-400">Total Leads</h2>
+      <p class="text-3xl font-bold text-dashboard-green">{{ totalleads }}</p>
+    </div>
+    <div class="bg-dashboard-gray rounded-xl p-4 shadow-md">
+      <h2 class="text-sm text-gray-400">Avg. Score</h2>
+      <p class="text-3xl font-bold text-dashboard-blue">{{ avgscore }}</p>
+    </div>
+    <div class="bg-dashboard-gray rounded-xl p-4 shadow-md">
+      <h2 class="text-sm text-gray-400">Valid Emails</h2>
+      <p class="text-3xl font-bold text-dashboard-green">{{ validemails }}</p>
+    </div>
+    <div class="bg-dashboard-gray rounded-xl p-4 shadow-md">
+      <h2 class="text-sm text-gray-400">Valid Phones</h2>
+      <p class="text-3xl font-bold text-dashboard-red">{{ validphones }}</p>
+    </div>
+  </div>
+
+  <!-- Leads Table -->
+  <div class="p-6">
+    <div class="bg-dashboard-gray rounded-xl shadow-lg overflow-hidden">
+      <table class="min-w-full text-gray-200 table-auto">
+  <thead class="bg-dashboard-black text-gray-400">
+    <tr>
+      <th class="px-4 py-2 text-left">Name</th>
+      <th class="px-4 py-2 text-left">Email</th>
+      <th class="px-4 py-2 text-left">Phone</th>
+      <th class="px-4 py-2 text-left">Company</th>
+      <th class="px-4 py-2 text-center">Score</th>
+      <th class="px-4 py-2 text-center">Source</th>
+      <!-- <th class="px-4 py-2 text-center">Actions</th> -->
+    </tr>
+  </thead>
+  <tbody *ngIf="leads && leads.length > 0">
+    <tr *ngFor="let lead of leads" class="hover:bg-[#2A3248] border-b border-gray-700">
+      <td class="px-4 py-2">{{ lead.name }}</td>
+      <td class="px-4 py-2">{{ lead.email }} 
+        <span *ngIf="lead.is_email_valid" class="text-green-400">✔</span>
+        <span *ngIf="!lead.is_email_valid" class="text-red-400">✘</span>
+      </td>
+      <td class="px-4 py-2">{{ lead.phone }} 
+        <span *ngIf="lead.is_phone_valid" class="text-green-400">✔</span>
+        <span *ngIf="!lead.is_phone_valid" class="text-red-400">✘</span>
+      </td>
+      <td class="px-4 py-2">{{ lead.company }}</td>
+      <td class="px-4 py-2 text-center">
+        <span 
+          class="px-2 py-1 rounded-lg text-sm font-medium"
+          [ngClass]="{
+            'bg-dashboard-blue text-white': lead.score >= 70,
+            'bg-dashboard-yellow text-white': lead.score >= 40 && lead.score < 70,
+            'bg-dashboard-red text-white': lead.score < 40
+          }"
+        >
+          {{ lead.score }}
+        </span>
+      </td>
+      <!-- <td class="px-4 py-2 text-center">
+        <span class="px-2 py-1 rounded-lg text-sm font-medium bg-dashboard-yellowlight text-dashboard-yellow">
+          {{ lead.score }}
+        </span>
+      </td> -->
+      <td class="px-4 py-2 text-center">{{ lead.source }}</td>
+      <!-- <td class="px-4 py-2 text-center">Detail</td> -->
+    </tr>
+  </tbody>
+</table>
+      <!-- <table class="min-w-full text-gray-200">
+        <thead class="bg-dashboard-black text-gray-400">
+          <tr>
+            <th class="px-4 py-2 text-left">Name</th>
+            <th class="px-4 py-2 text-left flex items-center gap-2">Email</th>
+            <th class="px-4 py-2 text-left flex items-center gap-2">Phone</th>
+            <th class="px-4 py-2 text-left">Company</th>
+            <th class="px-4 py-2 text-center">Score</th>
+            <th class="px-4 py-2 text-center">Source</th>
+            <th class="px-4 py-2 text-center">Actions</th>
+          </tr>
+        </thead>
+        <div *ngIf="leads && leads.length > 0">
+            <tbody>
+              <tr *ngFor="let lead of leads" class="hover:bg-[#2A3248] border-b border-gray-700">
+                <td class="px-4 py-2">{{ lead.name }}</td>
+                <td class="px-4 py-2 flex items-center gap-2">
+                  {{ lead.email }}
+                  <span *ngIf="lead.is_email_valid" class="text-green-400">✔</span>
+                  <span *ngIf="!lead.is_email_valid" class="text-red-400">✘</span>
+                </td>
+                <td class="px-4 py-2 flex items-center gap-2">
+                  {{ lead.phone }}
+                  <span *ngIf="lead.is_phone_valid" class="text-green-400">✔</span>
+                  <span *ngIf="!lead.is_phone_valid" class="text-red-400">✘</span>
+                </td>
+                <td class="px-4 py-2">{{ lead.company }}</td>
+                <td class="px-4 py-2 text-center">
+                  <span class="px-2 py-1 rounded-lg text-sm font-medium bg-dashboard-yellowlight text-dashboard-yellow">
+                    {{ lead.score }}
+                  </span>
+                </td>
+                <td class="px-4 py-2 text-center">{{ lead.source }}</td>
+                <td class="px-4 py-2 text-center">
+                  <button class="px-3 py-1 bg-blue-500 hover:bg-dashboard-blue text-white rounded-lg text-sm">
+                    Detail
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+        </div>
+      </table> -->
+
+      <div class="flex justify-between items-center p-4 bg-dashboard-gray border-t border-gray-700">
+        <button (click)="prevPage()" [disabled]="page === 1"
+          class="px-3 py-1 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 disabled:opacity-50">
+          Prev
+        </button>
+
+        <span class="text-sm text-gray-400">
+          Page {{ page }} of {{ totalPages }}
+        </span>
+
+        <button (click)="nextPage()" [disabled]="page === totalPages"
+          class="px-3 py-1 rounded-lg bg-gray-700 text-gray-300 hover:bg-gray-600 disabled:opacity-50">
+          Next
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

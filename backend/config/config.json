@@ -1,0 +1,45 @@
+
+{
+  "development": {
+    "username": "root",
+    "password": "",
+    "database": "leads_db",
+    "host": "LOCALHOST",
+    "dialect": "mysql",
+    "ipserver": "192.168.1.5",
+    "porthttp": 4100,
+    "portserver": 4000,
+    "porthttp2": 4000,
+    "portdb": 3306,
+    "operatorAliases": false     
+  },
+  "test": {
+    "username": "root",
+    "password": "",
+    "database": "leads_db",
+    "host": "LOCALHOST",
+    "dialect": "mysql",
+    "ipserver": "192.168.1.5",
+    "porthttp": 3200,
+    "portserver": 3000,
+    "porthttp2": 4000,
+    "portdb": 3306,
+    "operatorAliases": false
+  },
+  "production": {
+    "username": "root",
+    "password": "",
+    "database": "leads_db",
+    "host": "LOCALHOST",
+    "dialect": "mysql",
+    "ipserver": "192.168.1.5",
+    "porthttp": 3000,
+    "portserver": 5000,
+    "porthttp2": 4000,
+    "portdb": 3306,
+    "operatorAliases": false
+  },
+  "listfoldermodel": {
+    "data": [{"data": ""}, {"data": "/master/employee"}, {"data": "/transaction/leave"}, {"data": "/transaction/document"}]
+  }
+}
